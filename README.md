@@ -1,8 +1,14 @@
-# Echo Server (TCP)
+# TCP Multi-Client Server with File Transfer & Toy RPC
 
-Python의 `socket` 모듈을 사용해 구현한 **TCP 기반 Echo Server**입니다.  
-클라이언트로부터 받은 데이터를 그대로 다시 전송(echo)하는 가장 기본적인 네트워크 서버로,  
-TCP 통신의 흐름과 서버 동작 원리를 이해하는 것을 목표로 합니다.
+Python의 `socket` 모듈을 사용해 구현한 **TCP 기반 멀티 클라이언트 서버**입니다.
+
+기본 Echo Server에서 시작하여 다음 기능들을 단계적으로 확장 구현했습니다:
+
+- Non-blocking I/O
+- `selectors` 기반 다중 클라이언트 처리
+- Length-Prefixed 메시지 프레이밍
+- 파일 업로드 / 다운로드 + SHA-256 무결성 검증
+- Toy RPC (Remote Procedure Call) 시스템
 
 본 프로젝트는 **자동차 네트워크 플랫폼 회사 인턴십 1차 교육 과제**의 일환으로 진행되었습니다.
 
@@ -10,11 +16,29 @@ TCP 통신의 흐름과 서버 동작 원리를 이해하는 것을 목표로 �
 
 ## 📌 Features
 
-- TCP 소켓 기반 서버 구현
-- 단일 클라이언트 연결 처리
-- 클라이언트로부터 수신한 데이터 그대로 재전송
-- Python 표준 라이브러리만 사용 (`socket`)
+### 1️⃣ TCP Echo
+- 클라이언트가 전송한 데이터를 그대로 반환
+- Length-prefix 기반 메시지 처리
 
----
+### 2️⃣ Multi-Client Handling
+- `selectors` 기반 이벤트 루프
+- Non-blocking 소켓 처리
+- 다중 클라이언트 동시 처리 가능
 
-## 📂 Project Structure
+### 3️⃣ Custom Application Protocol
+- 4-byte Big Endian Length Prefix
+- JSON Header + Binary Payload 구조
+- Request / Response ID 매칭 지원
+
+### 4️⃣ File Transfer
+- 파일 업로드
+- 파일 다운로드
+- SHA-256 기반 무결성 검증
+
+### 5️⃣ Toy RPC System
+- 서버 함수 원격 호출
+- 지원 메서드:
+  - `ping`
+  - `add`
+  - `echo`
+- Request ID 기반 응답 매칭
